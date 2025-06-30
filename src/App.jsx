@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom'; // removed BrowserRouter
 import Home from './pages/Home';
 import Create from "./pages/Create";
 import Edit from "./pages/Edit";
@@ -50,8 +50,6 @@ function App() {
 
   return (
     <div className='mx-auto max-w-3xl'>
-    <BrowserRouter >
-    
       <Routes>
         <Route
           path="/home"
@@ -87,7 +85,6 @@ function App() {
         <Route path="/delete" element={<Delete />} />
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
-    </BrowserRouter>
     </div>
   );
 }
