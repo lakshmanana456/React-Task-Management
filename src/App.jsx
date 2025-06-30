@@ -1,0 +1,100 @@
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import Create from "./pages/Create"
+import Edit from "./pages/Edit"
+import Delete from "./pages/Delete"
+import './App.css';
+
+function App() {
+const initialFormData={
+  title:"",        
+  description:"",
+  priority:"",
+}
+const[formData,setFormData]= useState(initialFormData)
+const [tableData, setTableData]= useState([])
+const [editIndex, setEditIndex]=useState(null) 
+
+
+const HandleFormDatachange=(key,value)=>{
+  console.log({key,value})
+
+  setFormData({
+    ...formData,
+    [key]: value,
+  })
+  // setFormData=null
+}
+//
+// const handleSubmitt = (e) => {
+//     e.preventDefault()
+//     setTableData([
+//       ...tableData,
+//       formData
+//     ])
+//     setFormData(initialFormData)
+//   }
+const handleSubmit=(e)=>{
+e.preventDefault()
+console.log("form submitted", formData);
+
+
+if(editIndex===null){
+  setTableData([ ...tableData, formData,])
+// setFormData(initialFormData)
+}else{
+  tableData[editIndex]=formData
+  // setFormData(initialFormData)
+  setTableData(tableData)
+  setEditIndex(null)
+
+}
+  setFormData(initialFormData)
+
+}
+const handleEdit=(index)=>{
+  console.log("edit clicke row",index);
+
+  const clickedItem=tableData[index]
+  setFormData(clickedItem)
+  setEditIndex(index)
+}
+///////////////////////////////////
+const handleDelete=(index)=>{
+tableData.splice(index,1)
+setTableData([...tableData])
+}
+  return (
+     <div className='mx-auto max-w-3xl'>
+    <BrowserRouter>
+     <Routes>
+     
+  <Route path="/home" element={<Home tableData={tableData} handleEdit={handleEdit}
+   handleDelete={handleDelete}
+    />}
+  />
+  <Route path="/create"
+ element={
+      <Create
+        formData={formData}
+        // editIndex={editIndex}
+        handleSubmit={handleSubmit}
+        HandleFormDatachange={HandleFormDatachange}
+        
+      />
+    }
+  />
+  <Route path="/edit" element={<Edit formData={formData} editIndex={editIndex} 
+  handleSubmit={handleSubmit}
+  HandleFormDatachange={HandleFormDatachange}/>} />
+  <Route path="/delete" element={<Delete />} />
+  <Route path="*" element={<Navigate to="/home" />} />
+</Routes>
+
+    </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
